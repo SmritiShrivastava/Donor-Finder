@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+    <h1>Please answer them to become a donor</h1>
+    <form method="post">
+        {%csrf_token%}
+        <input type="checkbox" id="drinked" name="drinked">
+        <label for="vehicle1"> I have not taken alcohol in last 6 months</label><br>
+        <input type="checkbox" id="donated" name="donated">
+        <label for="vehicle2"> I have not donated blood in last 6 months</label><br>
+        <input type="checkbox" id="disease" name="disease">
+        <label for="vehicle3"> I don't have any disease</label><br>
+        <button type="submit">Submit</button>
+    </form>
+    <h1>first Name: {{donorModel.}}</h1>
+{%endblock%}

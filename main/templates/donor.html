@@ -1,0 +1,15 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+<div class="container">
+    {%if messages%}
+    {%for message in messages%}
+        {{message}}
+    {%endfor%}
+    {%endif%}
+</div>
+<div class="container">
+    <h1>{{donorM}}</h1>
+</div>
+
+{%endblock%}

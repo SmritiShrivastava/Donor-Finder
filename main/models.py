@@ -27,3 +27,14 @@ class userProfiles(User):
     age = models.IntegerField()
     contactNumber = models.IntegerField()
     created = models.DateTimeField(auto_now = True)
+
+class donorModel(models.Model):
+    donated = models.BooleanField(default = False)
+    drinked = models.BooleanField(default = False)
+    disease = models.BooleanField(default = False)
+    userkey = models.ForeignKey(userProfiles, on_delete = models.CASCADE)
+    bloodGroup = models.CharField(max_length=50, default = "o+")
+    created = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return self.user.username

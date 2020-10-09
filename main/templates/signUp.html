@@ -7,10 +7,18 @@
             <p>{{message}}</p>
         {%endfor%}
         {%endif%}
-        <form method="POST">
-            {%csrf_token%}
-            {{form.as_p}}
-            <input type="submit" name="submit">
-        </form>
+        <center>
+        <div class="card" style="width: 400px;">
+            <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQY5_2dH6Dp9E6PYyuoVWoctRE7Yo3QG-UXdQ&usqp=CAU" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Sign Up</h5>
+              <form method="POST">
+                {%csrf_token%}
+                {{form.as_p}}
+                <a href="{%url 'login'%}" class="btn btn-success">Sign Up</a>
+            </form>
+            </div>
+          </div>
+        </center>
     </div>
 {%endblock%}

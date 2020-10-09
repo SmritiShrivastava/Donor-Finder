@@ -14,3 +14,11 @@ class signUpForm(forms.Form):
 class logInForm(forms.Form):
     username = forms.CharField(max_length = 200)
     password = forms.CharField(max_length = 100)
+
+class donorForm(forms.Form):
+    donated = forms.BooleanField()
+    drinked = forms.BooleanField()
+    disease = forms.BooleanField()
+
+class searchForm(forms.Form):
+    search = forms.CharField(max_length=100)

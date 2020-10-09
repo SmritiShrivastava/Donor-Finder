@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+<h1>receive page</h1>
+<div class="container">
+  <form method="POST" action="{%url 'receive'%}" class="form-inline">
+    {%csrf_token%}
+      <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-info my-2 my-sm-0" name="submit" type="submit">Search</button>
+  </form>
+</div>
+{%endblock%}

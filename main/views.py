@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate,login,logout
 def homeView(request):
     return render(request, "home.html")
 
+
 def signUpView(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -48,29 +49,93 @@ def signUpView(request):
         return render(request, "signUp.html", context)
 
 def logInView(request):
-    if request.method == "POST":
-        form = logInForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            if userProfiles.objects.filter(username = username).exists():
-                user = authenticate(request, username = username, password = password)
-                if user is not None:
-                    login(request, user)
-                    return redirect("home")
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            form = logInForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                if userProfiles.objects.filter(username = username).exists():
+                    user = authenticate(request, username = username, password = password)
+                    if user is not None:
+                        login(request, user)
+                        return render(request, "detail.html")
+                    else:
+                        messages.info(request, "username and password doesn't maatch")
+                        return redirect("login")
                 else:
-                    messages.info(request, "username and password doesn't maatch")
-                    return redirect("login")
+                    messages.info(request, "username doesn't exists")
+                    return redirect("signup")
             else:
-                messages.info(request, "username doesn't exists")
-                return redirect("signup")
+                messages.info(request, "something went wrong")
+                return redirect("login")
         else:
-            messages.info(request, "something went wrong")
-            return redirect("login")
-    else:
-        form = logInForm()
-        context = {
-            'form': form
-        }
-        return render(request, "logIn.html", context)
+            form = logInForm()
+            context = {
+                'form': form
+            }
+            return render(request, "logIn.html", context)
 
+def logoutView(request):
+	if request.user.is_authenticated:
+		logout(request)
+		return redirect("home")
+	else:
+		return redirect("login")
+
+def detailView(request):
+    if request.user.is_authenticated:
+        return render(request, "detail.html")
+
+def donateView(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = donorForm(request.POST)
+            if form.is_valid():
+                donated = form.cleaned_data.get('donated')
+                drinked = form.cleaned_data.get('drinked')
+                disease = form.cleaned_data.get('disease')
+                bloodGroup = userProfiles.objects.get(bloodGroup = request.User.bloodGroup)
+                if donated is True and drinked is True and disease is True:
+                    object = donorModel.objects.create(
+                        donated = donated,
+                        drinked = drinked,
+                        disease = disease,
+                        user = userProfiles.objects.get(username = request.user),
+                        bloodGroup = bloodGroup
+                    )
+                    object.save()
+                    messages.success(request, "Congratulations, You are all set to become somesone's donor and save a life")
+                    return redirect("detail")
+            else:
+                messages.info(request, "You are not allowed to donate blood now")
+                return redirect(donateView)
+        else:
+            form = donorForm()
+            context = {
+                'form': form
+            }
+            return render(request, "donate.html", context)
+
+def findDonorView(request):
+    if request.user.is_authenticated:
+        return render(request, "receive.html")
+
+def receiveView(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            search = request.POST['search']
+            print(search)
+            queryset = {}
+            if search == " ":
+                pass
+            else:
+                queryset = userProfiles.objects.filter(bloodGroup__iexact = search)
+                print(queryset)
+            context = {
+                'models': queryset
+            }
+            return render(request, "donor.html", context)
+        else:
+            form = searchForm()
+            return redirect(request, 'receive')
