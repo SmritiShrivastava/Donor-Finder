@@ -12,6 +12,7 @@ def homeView(request):
 
 def signUpView(request):
     if request.method == "POST":
+        print("Ch")
         username = request.POST['username']
         if userProfiles.objects.filter(username = username).exists():
             messages.info(request, "username already exists")
@@ -23,8 +24,9 @@ def signUpView(request):
         age = request.POST['age']
         contactNumber = request.POST['contactNumber']
         password = request.POST['password']
-        confirmPassword = request.POST['confirmPassword']
-        if password == confirmPassword:
+        confirm_Password = request.POST['confirm_Password']
+        print(password, confirm_Password)
+        if password == confirm_Password:
             object = userProfiles()
             object.username = username
             object.firstName = firstName
@@ -56,10 +58,14 @@ def logInView(request):
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password')
                 if userProfiles.objects.filter(username = username).exists():
+                    queryset = userProfiles.objects.get(username = username)
                     user = authenticate(request, username = username, password = password)
                     if user is not None:
                         login(request, user)
-                        return render(request, "detail.html")
+                        context={
+                            'models':queryset,
+                        }
+                        return render(request, "detail.html",context)
                     else:
                         messages.info(request, "username and password doesn't maatch")
                         return redirect("login")
@@ -75,6 +81,8 @@ def logInView(request):
                 'form': form
             }
             return render(request, "logIn.html", context)
+    else:
+        return redirect('donate')
 
 def logoutView(request):
 	if request.user.is_authenticated:
@@ -95,13 +103,14 @@ def donateView(request):
                 donated = form.cleaned_data.get('donated')
                 drinked = form.cleaned_data.get('drinked')
                 disease = form.cleaned_data.get('disease')
-                bloodGroup = userProfiles.objects.get(bloodGroup = request.User.bloodGroup)
+                bloodgroupuser = userProfiles.objects.get(username = request.user)
+                bloodGroup = bloodgroupuser.bloodGroup
                 if donated is True and drinked is True and disease is True:
                     object = donorModel.objects.create(
                         donated = donated,
                         drinked = drinked,
                         disease = disease,
-                        user = userProfiles.objects.get(username = request.user),
+                        userkey = userProfiles.objects.get(username = request.user),
                         bloodGroup = bloodGroup
                     )
                     object.save()
@@ -113,7 +122,8 @@ def donateView(request):
         else:
             form = donorForm()
             context = {
-                'form': form
+                'form': form,
+                'models':userProfiles.objects.get(username = request.user),
             }
             return render(request, "donate.html", context)
 

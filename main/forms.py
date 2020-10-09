@@ -9,7 +9,7 @@ class signUpForm(forms.Form):
     age = forms.IntegerField()
     contactNumber = forms.IntegerField()
     password = forms.CharField(max_length = 100)
-    confirmPassword = forms.CharField(max_length = 100)
+    confirm_Password = forms.CharField(max_length = 100)
 
 class logInForm(forms.Form):
     username = forms.CharField(max_length = 200)
