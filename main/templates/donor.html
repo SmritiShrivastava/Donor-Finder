@@ -13,10 +13,8 @@
     <div class="check">
         {%for i in models%}
             <div class= "data">
-                <p>{{i.userkey.firstName}}</p>
-                <p>
-                    {{i.created}}
-                </p>
+                <p>Name: {{i.firstName}} {{i.lastName}}</p>
+                <p>BloodGroup: {{i.bloodGroup}}</p>
             </div>
         {%endfor%}
     </div>

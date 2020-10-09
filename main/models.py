@@ -29,13 +29,15 @@ class userProfiles(User):
     created = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.firstName+self.lastName
+        return self.username
 
 class donorModel(models.Model):
     donated = models.BooleanField(default = False)
     drinked = models.BooleanField(default = False)
     disease = models.BooleanField(default = False)
     userkey = models.ForeignKey(userProfiles, on_delete = models.CASCADE)
+    firstName = models.CharField(max_length = 200, default = "smriti")
+    lastName = models.CharField(max_length = 200, default = "shrivastava")
     bloodGroup = models.CharField(max_length=50, default = "O+")
     created = models.DateTimeField(auto_now = True)
 

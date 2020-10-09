@@ -39,7 +39,7 @@ def signUpView(request):
             object.save()
             message_string = "Thank You" + username
             messages.success(request, message_string)
-            return redirect("home")
+            return redirect("login")
         else:
             messages.warning(request, "Password doesn't matched")
             return redirect("signup")
@@ -105,13 +105,17 @@ def donateView(request):
                 disease = form.cleaned_data.get('disease')
                 bloodgroupuser = userProfiles.objects.get(username = request.user)
                 bloodGroup = bloodgroupuser.bloodGroup
+                firstName = bloodgroupuser.firstName
+                lastName = bloodgroupuser.lastName
                 if donated is True and drinked is True and disease is True:
                     object = donorModel.objects.create(
                         donated = donated,
                         drinked = drinked,
                         disease = disease,
-                        userkey = userProfiles.objects.get(username = request.user),
-                        bloodGroup = bloodGroup
+                        userkey = bloodgroupuser,
+                        bloodGroup = bloodGroup,
+                        firstName = firstName,
+                        lastName = lastName
                     )
                     object.save()
                     messages.success(request, "Congratulations, You are all set to become somesone's donor and save a life")
