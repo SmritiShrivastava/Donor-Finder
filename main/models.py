@@ -33,8 +33,8 @@ class donorModel(models.Model):
     drinked = models.BooleanField(default = False)
     disease = models.BooleanField(default = False)
     userkey = models.ForeignKey(userProfiles, on_delete = models.CASCADE)
-    bloodGroup = models.CharField(max_length=50, default = "o+")
+    bloodGroup = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.user.username
+        return self.userkey.username
